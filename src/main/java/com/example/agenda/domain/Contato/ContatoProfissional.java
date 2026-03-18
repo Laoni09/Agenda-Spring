@@ -9,7 +9,8 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("PROFISSIONAL")
 public class ContatoProfissional extends Contato {
-    @Column(nullable = false, length = 255)
+    // vamos ver como colocar o not null aqui, porque o hibernate não aceita
+    @Column(length = 255)
     private String empresa;
 
     public ContatoProfissional() {

@@ -29,7 +29,7 @@ public class TaskService {
 
     public List<TaskDTO> listarTasks(Integer contatoId) {
         return taskRepository.findByContatoId(contatoId).stream()
-                .map(task -> new TaskDTO(task.getId(), task.getNome(), task.getDescription(), task.isCompleted(), task.getContato()))
+                .map(task -> new TaskDTO(task.getId(), task.getNome(), task.getDescription(), task.isCompleted(), task.getContato().getId()))
                 .toList();
     }
 

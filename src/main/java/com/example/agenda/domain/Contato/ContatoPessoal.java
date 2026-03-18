@@ -10,7 +10,8 @@ import jakarta.persistence.DiscriminatorValue;
 @Entity
 @DiscriminatorValue("PESSOAL")
 public class ContatoPessoal extends Contato {
-    @Column(nullable = false, length = 14)
+    // vamos ver como colocar o not null aqui, porque o hibernate não aceita
+    @Column(length = 14)
     private String cpf;
 
     public ContatoPessoal() {
