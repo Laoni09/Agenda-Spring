@@ -33,6 +33,8 @@ public class AgendaService {
     @Transactional
     public void adicionarContatoProfissional(String nome, String telefone, String empresa, Integer usuarioId) {
         Usuario donoDoContato = usuarioRepository.getReferenceById(usuarioId);
+
+        //Spring lança uma EntityNotFoundException quando executar o save()
         contatoRepository.save(new ContatoProfissional(nome, telefone, empresa, donoDoContato));
     }
 
