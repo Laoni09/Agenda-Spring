@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.constraints.NotBlank;
 
 import com.example.agenda.domain.Contato.ContatoDTO;
 import com.example.agenda.service.AgendaService;
@@ -24,8 +25,15 @@ public class AgendaController {
         this.agendaService = agendaService;
     }
 
-    public record ContatoProfissionalRequest(String nome, String telefone, String empresa) {}
-    public record ContatoPessoalRequest(String nome, String telefone, String cpf) {}
+    public record ContatoProfissionalRequest(
+        @NotBlank(message = "Nome é obrigatório") String nome, 
+        @NotBlank(message = "Telefone é obrigatório") String telefone, 
+        @NotBlank(message = "Empresa é obrigatória") String empresa) {}
+    
+    public record ContatoPessoalRequest(
+        @NotBlank(message = "Nome é obrigatório") String nome, 
+        @NotBlank(message = "Telefone é obrigatório") String telefone, 
+        @NotBlank(message = "CPF é obrigatório") String cpf) {}
 
     @GetMapping("/{usuarioId}")
     public ResponseEntity<List<ContatoDTO>> listarContatos(@PathVariable Integer usuarioId) {

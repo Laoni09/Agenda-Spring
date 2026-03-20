@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.constraints.NotBlank;
 
 import com.example.agenda.service.UsuarioService;
 
@@ -19,8 +20,14 @@ public class UsuarioController {
     }
 
     // DTOs de entrada
-    public record LoginRequest(String email, String senha) {}
-    public record RegisterRequest(String nome, String email, String senha) {}
+    public record LoginRequest(
+        @NotBlank(message = "Email é obrigatório") String email, 
+        @NotBlank(message = "Senha é obrigatória") String senha) {}
+        
+    public record RegisterRequest(
+        @NotBlank(message = "Nome é obrigatório") String nome, 
+        @NotBlank(message = "Email é obrigatório") String email, 
+        @NotBlank(message = "Senha é obrigatória") String senha) {}
 
     @PostMapping("/login")
     public ResponseEntity<Integer> login(@RequestBody LoginRequest request) {

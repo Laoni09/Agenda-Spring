@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.constraints.NotBlank;
 
 import com.example.agenda.domain.Task.TaskDTO;
 import com.example.agenda.service.TaskService;
@@ -25,7 +26,10 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    public record TaskRequest(String nome, String description, boolean completed) {}
+    public record TaskRequest(
+        @NotBlank(message = "Nome é obrigatório") String nome, 
+        @NotBlank(message = "Descrição é obrigatória") String description, 
+        @NotBlank(message = "Status é obrigatório") boolean completed) {}
 
     @GetMapping("/{contatoId}")
     public ResponseEntity<List<TaskDTO>> listarTasks(@PathVariable Integer contatoId) {
