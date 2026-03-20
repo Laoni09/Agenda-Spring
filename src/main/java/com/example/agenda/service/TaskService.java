@@ -45,7 +45,6 @@ public class TaskService {
         task.setNome(nome);
         task.setDescription(description);
         task.setCompleted(completed);
-        taskRepository.save(task);
     }
 
     @Transactional
