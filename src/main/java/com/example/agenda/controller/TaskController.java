@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 import com.example.agenda.domain.Task.TaskDTO;
@@ -37,13 +39,13 @@ public class TaskController {
     }
 
     @PostMapping("/{contatoId}")
-    public ResponseEntity<Void> adicionarTask(@PathVariable Integer contatoId, @RequestBody TaskRequest request) {
+    public ResponseEntity<Void> adicionarTask(@PathVariable Integer contatoId, @Valid @RequestBody TaskRequest request) {
         taskService.adicionarTask(request.nome(), request.description(), contatoId);
         return ResponseEntity.status(HttpStatus.CREATED).build();  
     }
 
     @PutMapping("/{contatoId}/{taskId}")
-    public ResponseEntity<Void> atualizarTask(@PathVariable Integer contatoId, @PathVariable Integer taskId, @RequestBody TaskRequest request) {
+    public ResponseEntity<Void> atualizarTask(@PathVariable Integer contatoId, @PathVariable Integer taskId, @Valid @RequestBody TaskRequest request) {
         taskService.atualizarTask(taskId, request.nome(), request.description(), request.completed(), contatoId);
         return ResponseEntity.ok().build();
     }

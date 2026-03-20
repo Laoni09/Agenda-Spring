@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 import com.example.agenda.domain.Contato.ContatoDTO;
@@ -42,13 +44,13 @@ public class AgendaController {
     }
     
     @PostMapping("/{usuarioId}/profissional")
-    public ResponseEntity<Void> adicionarContatoProfissional(@PathVariable Integer usuarioId, @RequestBody ContatoProfissionalRequest request) {
+    public ResponseEntity<Void> adicionarContatoProfissional(@PathVariable Integer usuarioId, @Valid @RequestBody ContatoProfissionalRequest request) {
         agendaService.adicionarContatoProfissional(request.nome(), request.telefone(), request.empresa(), usuarioId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/{usuarioId}/pessoal")
-    public ResponseEntity<Void> adicionarContatoPessoal(@PathVariable Integer usuarioId, @RequestBody ContatoPessoalRequest request) {
+    public ResponseEntity<Void> adicionarContatoPessoal(@PathVariable Integer usuarioId, @Valid @RequestBody ContatoPessoalRequest request) {
         agendaService.adicionarContatoPessoal(request.nome(), request.telefone(), request.cpf(), usuarioId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
