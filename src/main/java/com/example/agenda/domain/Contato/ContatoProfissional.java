@@ -5,11 +5,13 @@ import com.example.agenda.domain.Usuario.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @DiscriminatorValue("PROFISSIONAL")
 public class ContatoProfissional extends Contato {
     // vamos ver como colocar o not null aqui, porque o hibernate não aceita
+    @NotBlank(message = "A empresa é obrigatória")
     @Column(length = 255)
     private String empresa;
 
