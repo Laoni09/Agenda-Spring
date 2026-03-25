@@ -27,7 +27,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("agenda-api")
                     .withExpiresAt(genExpiratioDate())
-                    .withSubject(usuario.getEmail())
+                    .withSubject(usuario.getId().toString())
                     .sign(algorithm);
 
         } catch (JWTCreationException e) {
