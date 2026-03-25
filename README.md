@@ -210,5 +210,3 @@ Gerencia a lista de afazeres vinculada a um contato específico.
 | **400 Bad Request** | A tarefa não pertence ao contato informado. | JSON de Erro Padrão ("Acesso negado.") |
 
 ---
-
-Posso auxiliar com algum outro ajuste no projeto ou já podemos prosseguir para o planejamento da arquitetura do projeto Javazon?
