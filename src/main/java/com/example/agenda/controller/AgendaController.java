@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 import com.example.agenda.domain.Contato.ContatoDTO;
+import com.example.agenda.domain.Usuario.Usuario;
 import com.example.agenda.service.AgendaService;
 
 @RestController
@@ -37,27 +39,36 @@ public class AgendaController {
         @NotBlank(message = "Telefone é obrigatório") String telefone, 
         @NotBlank(message = "CPF é obrigatório") String cpf) {}
 
-    @GetMapping("/{usuarioId}")
-    public ResponseEntity<List<ContatoDTO>> listarContatos(@PathVariable Integer usuarioId) {
-        List<ContatoDTO> contatos = agendaService.listarContatos(usuarioId);
+    @GetMapping
+    public ResponseEntity<List<ContatoDTO>> listarContatos(@AuthenticationPrincipal Usuario usuario) {
+        List<ContatoDTO> contatos = agendaService.listarContatos(usuario.getId());
         return ResponseEntity.ok(contatos);
     }
     
-    @PostMapping("/{usuarioId}/profissional")
-    public ResponseEntity<Void> adicionarContatoProfissional(@PathVariable Integer usuarioId, @Valid @RequestBody ContatoProfissionalRequest request) {
-        agendaService.adicionarContatoProfissional(request.nome(), request.telefone(), request.empresa(), usuarioId);
+    @PostMapping("/profissional")
+    public ResponseEntity<Void> adicionarContatoProfissional(
+            @AuthenticationPrincipal Usuario usuario, 
+            @Valid @RequestBody ContatoProfissionalRequest request) {
+
+        agendaService.adicionarContatoProfissional(request.nome(), request.telefone(), request.empresa(), usuario.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/{usuarioId}/pessoal")
-    public ResponseEntity<Void> adicionarContatoPessoal(@PathVariable Integer usuarioId, @Valid @RequestBody ContatoPessoalRequest request) {
-        agendaService.adicionarContatoPessoal(request.nome(), request.telefone(), request.cpf(), usuarioId);
+    @PostMapping("/pessoal")
+    public ResponseEntity<Void> adicionarContatoPessoal(
+            @AuthenticationPrincipal Usuario usuario, 
+            @Valid @RequestBody ContatoPessoalRequest request) {
+
+        agendaService.adicionarContatoPessoal(request.nome(), request.telefone(), request.cpf(), usuario.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/{usuarioId}/remover/{idContato}")
-    public ResponseEntity<Void> removerContato(@PathVariable Integer usuarioId, @PathVariable Integer idContato) {
-        agendaService.removerContato(idContato, usuarioId);
+    @DeleteMapping("/remover/{idContato}")
+    public ResponseEntity<Void> removerContato(
+            @AuthenticationPrincipal Usuario usuario, 
+            @PathVariable Integer idContato) {
+                
+        agendaService.removerContato(idContato, usuario.getId());
         return ResponseEntity.noContent().build();
     }
 }

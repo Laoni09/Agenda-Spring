@@ -16,7 +16,7 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Integer login(String email, String senha) {
+    public Usuario login(String email, String senha) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         
@@ -24,7 +24,7 @@ public class UsuarioService {
             throw new RuntimeException("Senha incorreta");
         }
 
-        return usuario.getId();
+        return usuario;
     }
 
     public void register(String nome, String email, String senha) {

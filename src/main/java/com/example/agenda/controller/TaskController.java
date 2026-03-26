@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 import com.example.agenda.domain.Task.TaskDTO;
+import com.example.agenda.domain.Usuario.Usuario;
 import com.example.agenda.service.TaskService;
 
 @RestController
@@ -34,25 +36,37 @@ public class TaskController {
         @NotBlank(message = "Status é obrigatório") boolean completed) {}
 
     @GetMapping("/{contatoId}")
-    public ResponseEntity<List<TaskDTO>> listarTasks(@PathVariable Integer contatoId) {
-        return ResponseEntity.ok(taskService.listarTasks(contatoId));
+    public ResponseEntity<List<TaskDTO>> listarTasks(
+            @AuthenticationPrincipal Usuario usuario,
+            @PathVariable Integer contatoId) {
+        return ResponseEntity.ok(taskService.listarTasks(contatoId, usuario.getId()));
     }
 
     @PostMapping("/{contatoId}")
-    public ResponseEntity<Void> adicionarTask(@PathVariable Integer contatoId, @Valid @RequestBody TaskRequest request) {
-        taskService.adicionarTask(request.nome(), request.description(), contatoId);
+    public ResponseEntity<Void> adicionarTask(
+            @AuthenticationPrincipal Usuario usuario,
+            @PathVariable Integer contatoId, 
+            @Valid @RequestBody TaskRequest request) {
+        taskService.adicionarTask(request.nome(), request.description(), contatoId, usuario.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();  
     }
 
     @PutMapping("/{contatoId}/{taskId}")
-    public ResponseEntity<Void> atualizarTask(@PathVariable Integer contatoId, @PathVariable Integer taskId, @Valid @RequestBody TaskRequest request) {
-        taskService.atualizarTask(taskId, request.nome(), request.description(), request.completed(), contatoId);
+    public ResponseEntity<Void> atualizarTask(
+            @AuthenticationPrincipal Usuario usuario,
+            @PathVariable Integer contatoId, 
+            @PathVariable Integer taskId, 
+            @Valid @RequestBody TaskRequest request) {
+        taskService.atualizarTask(taskId, request.nome(), request.description(), request.completed(), contatoId, usuario.getId());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{contatoId}/{taskId}")
-    public ResponseEntity<Void> removerTask(@PathVariable Integer contatoId, @PathVariable Integer taskId) {
-        taskService.removerTask(taskId, contatoId);
+    public ResponseEntity<Void> removerTask(
+            @AuthenticationPrincipal Usuario usuario,
+            @PathVariable Integer contatoId, 
+            @PathVariable Integer taskId) {
+        taskService.removerTask(taskId, contatoId, usuario.getId());
         return ResponseEntity.noContent().build();
     }
 }

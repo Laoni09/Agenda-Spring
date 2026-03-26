@@ -22,22 +22,37 @@ public class TaskService {
     }
 
     @Transactional
-    public void adicionarTask(String nome, String description, Integer contatoId) {
+    public void adicionarTask(String nome, String description, Integer contatoId, Integer usuarioId) {
         Contato contato = contatoRepository.getReferenceById(contatoId);
+
+        if (!contato.getUsuario().getId().equals(usuarioId)) {
+            throw new RuntimeException("Acesso negado: Este contato não pertence ao usuário.");
+        }
+
         taskRepository.save(new Task(nome, description, contato));
     }
 
-    public List<TaskDTO> listarTasks(Integer contatoId) {
+    public List<TaskDTO> listarTasks(Integer contatoId, Integer usuarioId) {
+        Contato contato = contatoRepository.getReferenceById(contatoId);
+        if (!contato.getUsuario().getId().equals(usuarioId)) {
+            throw new RuntimeException("Acesso negado: Este contato não pertence ao usuário.");
+        }
+
         return taskRepository.findByContatoId(contatoId).stream()
                 .map(task -> new TaskDTO(task.getId(), task.getNome(), task.getDescription(), task.isCompleted(), task.getContato().getId()))
                 .toList();
     }
 
     @Transactional
-    public void atualizarTask(Integer id, String nome, String description, boolean completed, Integer contatoId) {
+    public void atualizarTask(Integer id, String nome, String description, boolean completed, Integer contatoId, Integer usuarioId) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task não encontrada."));
             
+        Contato contato = contatoRepository.getReferenceById(contatoId);
+        if (!contato.getUsuario().getId().equals(usuarioId)) {
+            throw new RuntimeException("Acesso negado: Este contato não pertence ao usuário.");
+        }
+
         if (!task.getContato().getId().equals(contatoId)) {
             throw new RuntimeException("Acesso negado.");
         }
@@ -48,9 +63,14 @@ public class TaskService {
     }
 
     @Transactional
-    public void removerTask(Integer id, Integer contatoId) {
+    public void removerTask(Integer id, Integer contatoId, Integer usuarioId) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task não encontrada."));
+
+        Contato contato = contatoRepository.getReferenceById(contatoId);
+        if (!contato.getUsuario().getId().equals(usuarioId)) {
+            throw new RuntimeException("Acesso negado: Este contato não pertence ao usuário.");
+        }
 
         if (!task.getContato().getId().equals(contatoId)) {
             throw new RuntimeException("Acesso negado.");

@@ -10,15 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
+import com.example.agenda.domain.Usuario.Usuario;
+import com.example.agenda.service.TokenService;
 import com.example.agenda.service.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
     private final UsuarioService usuarioService;
+    private final TokenService tokenService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, TokenService tokenService) {
         this.usuarioService = usuarioService;
+        this.tokenService = tokenService;
+        
     }
 
     // DTOs de entrada
@@ -32,9 +37,13 @@ public class UsuarioController {
         @NotBlank(message = "Senha é obrigatória") String senha) {}
 
     @PostMapping("/login")
-    public ResponseEntity<Integer> login(@Valid @RequestBody LoginRequest request) {
-        Integer usuarioId = usuarioService.login(request.email(), request.senha());
-        return ResponseEntity.ok(usuarioId); // Retorna HTTP 200 com o ID
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
+
+        Usuario usuario = usuarioService.login(request.email(), request.senha());
+
+        String token = tokenService.generateToken(usuario);
+        
+        return ResponseEntity.ok(token); // Retorna HTTP 200 com o token
     }
 
     @PostMapping("/registrar")
