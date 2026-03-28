@@ -33,8 +33,7 @@ public class TaskService {
     }
 
     public List<TaskDTO> listarTasks(Integer contatoId, Integer usuarioId) {
-        Contato contato = contatoRepository.getReferenceById(contatoId);
-        if (!contato.getUsuario().getId().equals(usuarioId)) {
+        if(contatoRepository.existsByIdAndUsuarioId(contatoId, usuarioId)){
             throw new RuntimeException("Acesso negado: Este contato não pertence ao usuário.");
         }
 
@@ -48,8 +47,7 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task não encontrada."));
             
-        Contato contato = contatoRepository.getReferenceById(contatoId);
-        if (!contato.getUsuario().getId().equals(usuarioId)) {
+        if(contatoRepository.existsByIdAndUsuarioId(contatoId, usuarioId)) {
             throw new RuntimeException("Acesso negado: Este contato não pertence ao usuário.");
         }
 
@@ -67,8 +65,7 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task não encontrada."));
 
-        Contato contato = contatoRepository.getReferenceById(contatoId);
-        if (!contato.getUsuario().getId().equals(usuarioId)) {
+        if(contatoRepository.existsByIdAndUsuarioId(contatoId, usuarioId)) {
             throw new RuntimeException("Acesso negado: Este contato não pertence ao usuário.");
         }
 

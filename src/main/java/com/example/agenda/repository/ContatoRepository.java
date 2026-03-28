@@ -11,4 +11,6 @@ import com.example.agenda.domain.Contato.Contato;
 public interface ContatoRepository extends JpaRepository<Contato, Integer> {
     // O Spring percebe que 'Usuario' é um objeto e acede ao 'id' dele para a query
     List<Contato> findByUsuarioId(Integer usuarioId);
+
+    boolean existsByIdAndUsuarioId(Integer id, Integer usuarioId);
 }
