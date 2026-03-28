@@ -36,14 +36,17 @@ public class UsuarioController {
         @NotBlank(message = "Email é obrigatório") String email, 
         @NotBlank(message = "Senha é obrigatória") String senha) {}
 
+    // DTO de resposta
+    public record TokenResponse(String token) {}
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
 
         Usuario usuario = usuarioService.login(request.email(), request.senha());
 
         String token = tokenService.generateToken(usuario);
         
-        return ResponseEntity.ok(token); // Retorna HTTP 200 com o token
+        return ResponseEntity.ok(new TokenResponse(token)); // Retorna HTTP 200 com o token
     }
 
     @PostMapping("/registrar")

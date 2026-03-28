@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
 
         if (token != null) {
-            var subjectId = tokenService.ValidateToken(token);
+            var subjectId = tokenService.validateToken(token);
 
             if(!subjectId.isEmpty()) {
                 Integer id = Integer.valueOf(subjectId);

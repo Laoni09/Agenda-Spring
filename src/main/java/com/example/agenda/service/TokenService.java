@@ -26,7 +26,7 @@ public class TokenService {
 
             return JWT.create()
                     .withIssuer("agenda-api")
-                    .withExpiresAt(genExpiratioDate())
+                    .withExpiresAt(genExpirationDate())
                     .withSubject(usuario.getId().toString())
                     .sign(algorithm);
 
@@ -35,7 +35,7 @@ public class TokenService {
         }
     }
 
-    public String ValidateToken(String token) {
+    public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
@@ -50,7 +50,7 @@ public class TokenService {
         }
     }
 
-    public Instant genExpiratioDate() {
+    public Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }
